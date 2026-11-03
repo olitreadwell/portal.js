@@ -12,33 +12,31 @@ const contentfulQueryStub = sinon.stub();
 
 const themePageContentfulResponse = () => ({
   data: {
-    data: {
-      themePage: { items: [{
-        identifier: 'art',
-        name: 'Art',
-        description: 'Description of the Art theme',
-        entityUri: 'http://data.europeana.eu/concept/123',
-        primaryImageOfPage: {
-          image: {
-            url: 'http://thumbnail.europeana.eu/art'
-          }
-        },
-        hasPartCollection: {
-          items: [
-            { '__typename': 'TopicGroup' },
-            { '__typename': 'Personroup' },
-            { '__typename': 'GalleryGroup' },
-            { '__typename': 'PrimaryCallToAction' },
-            { '__typename': 'CardGroup',
-              hasPartCollection: {
-                items: [{
-                  encoding: {}
-                }]
-              } }
-          ]
+    themePage: { items: [{
+      identifier: 'art',
+      name: 'Art',
+      description: 'Description of the Art theme',
+      entityUri: 'http://data.europeana.eu/concept/123',
+      primaryImageOfPage: {
+        image: {
+          url: 'http://thumbnail.europeana.eu/art'
         }
-      }] }
-    }
+      },
+      hasPartCollection: {
+        items: [
+          { '__typename': 'EntityGroup', hasPart: ['http://data.europeana.eu/concept/1'] },
+          { '__typename': 'EntityGroup', hasPart: ['http://data.europeana.eu/agent/1'] },
+          { '__typename': 'GalleryGroup' },
+          { '__typename': 'PrimaryCallToAction' },
+          { '__typename': 'CardGroup',
+            hasPartCollection: {
+              items: [{
+                encoding: {}
+              }]
+            } }
+        ]
+      }
+    }] }
   }
 });
 
@@ -59,7 +57,6 @@ const factory = ({ contentfulResponse = themePageContentfulResponse(), data = {}
       $contentful: {
         query: contentfulQueryStub
       },
-      $fetchState: {},
       $i18n: {
         locale: 'en',
         localeProperties: { iso: 'en-GB' },
@@ -107,7 +104,7 @@ describe('pages/themes/_', () => {
     describe('when there is no theme identifier found', () => {
       it('throws a 404 error via $error', async() => {
         const contentfulResponse = themePageContentfulResponse();
-        contentfulResponse.data.data.themePage.items[0].identifier = null;
+        contentfulResponse.data.themePage.items[0].identifier = null;
         const wrapper = factory({ contentfulResponse });
 
         await wrapper.vm.fetch();
@@ -119,7 +116,7 @@ describe('pages/themes/_', () => {
     describe('when there is no theme found', () => {
       it('throws a 404 error via $error', async() => {
         const contentfulResponse = themePageContentfulResponse();
-        contentfulResponse.data.data.themePage.items[0] = null;
+        contentfulResponse.data.themePage.items[0] = null;
         const wrapper = factory({ contentfulResponse });
 
         await wrapper.vm.fetch();
@@ -131,12 +128,36 @@ describe('pages/themes/_', () => {
 
   describe('pageMeta', () => {
     it('uses the primary image of page for og:image', () => {
-      const data = themePageContentfulResponse().data.data.themePage.items[0];
+      const data = themePageContentfulResponse().data.themePage.items[0];
       const wrapper = factory({ data });
 
       const pageMeta = wrapper.vm.pageMeta;
 
       expect(pageMeta.ogImage).toBe(data.primaryImageOfPage.image);
+    });
+  });
+
+  describe('when there are multiple related topics sections', () => {
+    it('shows those sections as entity badges', async() => {
+      const contentfulResponse = themePageContentfulResponse();
+      contentfulResponse.data.themePage.items[0].hasPartCollection.items.push({ '__typename': 'EntityGroup', hasPart: ['http://data.europeana.eu/concept/2'] });
+      const wrapper = factory({ contentfulResponse });
+
+      await wrapper.vm.$fetch();
+
+      expect(wrapper.findAll('entitybadges-stub').length).toBe(2);
+    });
+  });
+
+  describe('when there are multiple related persons sections', () => {
+    it('shows only the first, as an entity card group', async() => {
+      const contentfulResponse = themePageContentfulResponse();
+      contentfulResponse.data.themePage.items[0].hasPartCollection.items.push({ '__typename': 'EntityGroup', hasPart: ['http://data.europeana.eu/agent/2'] });
+      const wrapper = factory({ contentfulResponse });
+
+      await wrapper.vm.$fetch();
+
+      expect(wrapper.findAll('entitycardgroup-stub').length).toBe(1);
     });
   });
 });

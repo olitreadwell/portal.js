@@ -52,11 +52,13 @@ export default {
     "depublish": "Depublish",
     "download": "Download",
     "edit": "Edit",
+    "email": "Email",
     "filter": "Filter",
     "goHome": "Go to the homepage",
     "hide": "Hide",
     "learnMore": "Learn more",
     "like": "Like",
+    "linkedIn": "LinkedIn profile",
     "login": "Log in",
     "move": "Move",
     "next": "Next",
@@ -107,14 +109,7 @@ export default {
         "create": {
           "button": "Request a personal API key",
           "checkbox": "I confirm that I have read and accept the API key {termsOfUseLink}."
-        },
-        "description": "Learn and test out how to use APIs with your own personal API key. Please do not share it. {howToLink}.",
-        "heading": "Personal API key",
-        "howToLinkText": "How to use your key"
-      },
-      "projectKeys": {
-        "description": "For every project you need to build, we’ll supply you with a dedicated key. Project keys have higher limits and other special features - read more in the API key {termsOfUseLink}. If you would like to edit the information about your project, please send an email to api@europeana.eu, and we will make the changes for you.",
-        "heading": "Project API keys"
+        }
       },
       "termsOfUseLinkText": "terms of use"
     },
@@ -1094,10 +1089,9 @@ export default {
       "header": {
         "homeLinkAlt": "Europeana APIs home",
         "navigation": {
-          "apiDemo": "API demo",
-          "europeanaApis": "Europeana APIs",
-          "faq": "FAQ",
-          "findInspiration": "Find inspiration"
+          "builtWith": "Built with our APIs",
+          "canDo": "What you can do with the APIs",
+          "getKey": "Get your free API key"
         }
       }
     },

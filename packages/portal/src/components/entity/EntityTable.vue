@@ -17,7 +17,7 @@
       @submit.stop.prevent="() => {}"
     >
       <b-form-input
-        v-model="query"
+        v-model="tableQuery"
         role="searchbox"
         :placeholder="$t('pages.collections.table.searchPlaceholder')"
         :aria-label="$t('search.title')"
@@ -48,10 +48,10 @@
           :destination="entityRoute(data.item.slug)"
         >
           <template v-if="isOrganisationsType">
-            <strong :lang="langAttribute(data.item.prefLabelLang)">{{ data.item.prefLabel }}</strong>
+            <strong :lang="langAttribute(data.item.prefLabelLang, $i18n.locale)">{{ data.item.prefLabel }}</strong>
             <span
               v-if="data.item.altLabel"
-              :lang="langAttribute(data.item.altLabelLang)"
+              :lang="langAttribute(data.item.altLabelLang, $i18n.locale)"
               class="subtitle"
             >
               {{ data.item.altLabel }}
@@ -119,7 +119,7 @@
   import LoadingSpinner from '../generic/LoadingSpinner';
   import PaginationNavInput from '@/components/generic/PaginationNavInput';
   import SmartLink from '../generic/SmartLink';
-  import langAttributeMixin from '@/mixins/langAttribute';
+  import { langAttribute } from '@/utils/langAttribute.js';
   import { backendFetch } from '@/utils/backendFetch.js';
 
   export default {
@@ -133,10 +133,6 @@
       PaginationNavInput,
       SmartLink
     },
-
-    mixins: [
-      langAttributeMixin
-    ],
 
     props: {
       /**
@@ -226,7 +222,7 @@
 
       return {
         collections: null,
-        query: this.$route?.query?.query || null,
+        tableQuery: this.$route?.query?.tableQuery || null,
         tableFields: fields.filter((field) => this.displayField(field.key)),
         typeSingular: this.type.slice(0, -1),
         totalResults: this.collections?.length || 0
@@ -312,8 +308,8 @@
     },
 
     watch: {
-      '$route.query.query'() {
-        this.query = this.$route.query.query;
+      '$route.query.tableQuery'() {
+        this.tableQuery = this.$route.query.tableQuery;
         this.$fetch();
       },
       '$route.query.page'() {
@@ -332,6 +328,7 @@
     },
 
     methods: {
+      langAttribute,
       isCollectionFocused(collection) {
         return collection.numericId === this.$route.query.show;
       },
@@ -382,7 +379,7 @@
           lang: this.$i18n.locale,
           page: this.currentPage,
           pageSize: this.perPage,
-          query: this.query,
+          query: this.tableQuery,
           sort: this.sort.join(' ')
         };
 
@@ -408,7 +405,7 @@
         return `/collections/${this.typeSingular}/${slug}`;
       },
       onFiltered() {
-        this.updateRouteQuery({ query: this.query, page: 1 });
+        this.updateRouteQuery({ tableQuery: this.tableQuery, page: 1 });
       },
       updateRouteQuery(newQuery, method = 'push') {
         this.$router[method]({ ...this.$route, query: { ...this.$route.query, ...newQuery } });

@@ -72,7 +72,12 @@
         :link="section.relatedLink"
         :background-image="section.image"
       />
+      <LandingPersonSection
+        v-else-if="contentfulEntryHasContentType(section, 'PersonGroup')"
+        :section="section"
+      />
     </div>
+    <span id="landing-tooltip-container" />
   </div>
 </template>
 
@@ -93,7 +98,8 @@
       LandingImageCard: () => import('./LandingImageCard'),
       LandingImageCardGroup: () => import('./LandingImageCardGroup'),
       LandingSubSection: () => import('./LandingSubSection'),
-      LandingEmbed: () => import('./LandingEmbed')
+      LandingEmbed: () => import('./LandingEmbed'),
+      LandingPersonSection: () => import('./LandingPersonSection')
     },
 
     props: {
@@ -185,7 +191,6 @@
 
   .landing-page {
     margin-top: -$page-header-height;
-    border-bottom: 1px solid transparent; // fix for when any margin of the last component on the page causes grey bg to display
 
     @media (min-width: $bp-4k) {
       margin-top: -$page-header-height-4k;
@@ -200,14 +205,21 @@
     }
 
     > div:last-child {
+      &.bg-color-alternate,
       .bg-color-alternate,
       .bg-lightgrey {
-        @include white-cutout;
+        @include footer-cutout($lightgrey);
+      }
 
-        &:after {
-          border-top-color: $lightgrey;
-          z-index: 1;
-        }
+      &.bg-color-highlight,
+      .bg-color-highlight,
+      .bg-dark {
+        @include footer-cutout($blue);
+      }
+
+      &.bg-color-alternate,
+      &.bg-color-highlight {
+        position: relative;
       }
     }
   }

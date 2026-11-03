@@ -140,6 +140,11 @@ Example:
           <td><span class="icon icon-ic-download" /></td>
         </tr>
         <tr>
+          <td>Download circle</td>
+          <td><code>icon-download-circle</code></td>
+          <td><span class="icon icon-download-circle" /></td>
+        </tr>
+        <tr>
           <td>Edit</td>
           <td><code>icon-edit</code></td>
           <td><span class="icon icon-edit" /></td>
@@ -184,6 +189,11 @@ Example:
           <td>Filter</td>
           <td><code>icon-filter</code></td>
           <td><span class="icon icon-filter" /></td>
+        </tr>
+        <tr>
+          <td>Folder</td>
+          <td><code>icon-folder</code></td>
+          <td><span class="icon icon-folder" /></td>
         </tr>
         <tr>
           <td>Fullscreen</td>
@@ -281,6 +291,11 @@ Example:
           <td><span class="icon icon-linkedin" /></td>
         </tr>
         <tr>
+          <td>LinkedIn circle</td>
+          <td><code>icon-linkedin-circle</code></td>
+          <td><span class="icon icon-linkedin-circle" /></td>
+        </tr>
+        <tr>
           <td>Location</td>
           <td><code>icon-location</code></td>
           <td><span class="icon icon-location" /></td>
@@ -335,6 +350,11 @@ Example:
           <td><code>icon-partner</code></td>
           <td><span class="icon icon-partner" /></td>
         </tr> 
+        <tr>
+          <td>Person Placeholder</td>
+          <td><code>icon-person-placeholder</code></td>
+          <td><span class="icon icon-person-placeholder" /></td>
+        </tr>
         <tr>
           <td>Pinterest</td>
           <td><code>icon-pinterest</code></td>
